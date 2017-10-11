@@ -1,0 +1,11 @@
+#English US Language File for R6C Mod
+
+#Creative Tab
+itemGroup.tab_r6c=Rainbow Six Craft
+
+#Items
+item.r6c_drone_terminal.name=Drone-Terminal
+item.r6c_drone.name=Drone
+
+#Entities
+entity.r6c_drone.name=Drone

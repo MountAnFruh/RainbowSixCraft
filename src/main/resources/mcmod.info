@@ -1,0 +1,16 @@
+[
+{
+  "modid": "r6cmod",
+  "name": "Rainbow Six Craft",
+  "description": "Flo's & Andi's Rainbow Six Craft",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Florian Rottmann","Andreas Fruhwirt"],
+  "credits": "Herr Professor Schiffermüller for making this possible",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "r6cmod:items/r6c_drone_terminal"
+  }
+}
