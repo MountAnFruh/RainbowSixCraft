@@ -9,8 +9,6 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import r6c.r6cmod.client.animation.AnimationHandlerDrone;
 import r6c.r6cmod.entity.ai.EntityAIDronePlayerControl;
 import r6c.r6cmod.item.ItemDroneTerminal;
@@ -43,6 +41,14 @@ public class EntityDrone extends EntityLiving implements IMCAnimatedEntity {
         this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(1.0);
         this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(1.0);
         this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.0);
+    }
+
+    @Override
+    public boolean attackEntityFrom(DamageSource source, float amount) {
+        if(source == DamageSource.FALL) {
+            return false;
+        }
+        return super.attackEntityFrom(source, amount);
     }
 
     @Override
