@@ -15,7 +15,7 @@ public class R6CMod {
 
     public static final String MODID = "r6cmod";
     public static final String VERSION = "0.1";
-    public static final String NAME = "Rainbow Six Craft";
+    public static final String NAME = "Rainbow Six | Craft";
 
     @SidedProxy(clientSide = "r6c.r6cmod.proxy.ClientProxy"
               , serverSide = "r6c.r6cmod.proxy.CommonProxy")
