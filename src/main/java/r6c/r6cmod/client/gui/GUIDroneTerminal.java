@@ -26,7 +26,7 @@ public class GUIDroneTerminal extends GuiScreen {
         this.drawDefaultBackground();
         Minecraft.getMinecraft().renderEngine.bindTexture(texture);
         this.drawTexturedModalRect(guiX,guiY,0,0,guiWidth,guiHeight);
-        this.drawString(fontRenderer, "Drone Tablet", guiX + 18, guiY + 15, 0xFFFFFF);
+        this.drawString(fontRenderer, "Drone Terminal", guiX + 18, guiY + 15, 0xFFFFFF);
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 

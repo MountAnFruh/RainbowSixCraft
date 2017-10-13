@@ -10,7 +10,7 @@ import r6c.r6cmod.entity.EntityDrone;
 
 public class RenderDrone extends RenderLiving<EntityDrone> {
 
-    public static final ResourceLocation DRONE_TEXTURE = new ResourceLocation(R6CMod.MODID, "textures/entities/r6c_drone.png");
+    public static final ResourceLocation DRONE_TEXTURE = new ResourceLocation(R6CMod.MODID, "textures/items/r6c_drone.png");
     public static ModelDrone modelDrone = new ModelDrone();
     public static float modelHeight = 3.3F;
 

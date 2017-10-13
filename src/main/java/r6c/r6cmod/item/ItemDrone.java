@@ -1,15 +1,15 @@
 package r6c.r6cmod.item;
 
-import net.minecraft.client.renderer.EnumFaceDirection;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import r6c.r6cmod.entity.EntityDrone;
 
@@ -26,17 +26,19 @@ public class ItemDrone extends Item {
     }
 
     @Override
-    public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
         if(!worldIn.isRemote) {
             EntityDrone drone = new EntityDrone(worldIn);
-            double x = pos.getX() + hitX + facing.getFrontOffsetX() * (drone.width - 0.1);
-            double y = pos.getY() + hitY + facing.getFrontOffsetY() * (drone.height + 0.1);
-            double z = pos.getZ() + hitZ + facing.getFrontOffsetZ() * (drone.width - 0.1);
-            drone.setPosition(x,y,z);
+            double x = playerIn.posX;
+            double y = playerIn.posY + playerIn.getEyeHeight();
+            double z = playerIn.posZ;
+            drone.setPositionAndRotation(x,y,z, playerIn.getRotationYawHead(), playerIn.rotationPitch);
+            Vec3d lookVec = playerIn.getLookVec();
+            drone.addVelocity(lookVec.x, lookVec.y, lookVec.z);
             worldIn.spawnEntity(drone);
-            return EnumActionResult.SUCCESS;
+            return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
         } else {
-            return EnumActionResult.FAIL;
+            return new ActionResult<ItemStack>(EnumActionResult.PASS, playerIn.getHeldItem(handIn));
         }
     }
 
