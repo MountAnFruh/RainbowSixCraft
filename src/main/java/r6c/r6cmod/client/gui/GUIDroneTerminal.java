@@ -3,8 +3,10 @@ package r6c.r6cmod.client.gui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
+import net.minecraft.world.World;
 import r6c.r6cmod.R6CMod;
 
 import java.io.IOException;
@@ -20,6 +22,16 @@ public class GUIDroneTerminal extends GuiScreen {
     private int guiY = 0;
 
     private GuiButton bExit;
+
+    private World worldIn;
+    private EntityPlayer player;
+    private EnumHand handIn;
+
+    public GUIDroneTerminal(World worldIn, EntityPlayer player, EnumHand handIn) {
+        this.worldIn = worldIn;
+        this.player = player;
+        this.handIn = handIn;
+    }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {

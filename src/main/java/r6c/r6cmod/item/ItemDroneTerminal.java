@@ -7,6 +7,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -31,10 +32,11 @@ public class ItemDroneTerminal extends Item {
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer player, EnumHand handIn) {
+        ItemStack stack = player.getHeldItem(handIn);
         if(worldIn.isRemote) { // Client Side
-            Minecraft.getMinecraft().displayGuiScreen(new GUIDroneTerminal());
+            Minecraft.getMinecraft().displayGuiScreen(new GUIDroneTerminal(worldIn,player,handIn));
         }
-        return super.onItemRightClick(worldIn, player, handIn);
+        return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
     }
 
     @Override
