@@ -30,18 +30,35 @@ public class ItemDroneTerminal extends Item {
         this.setMaxStackSize(1);
     }
 
+    private NBTTagCompound getNBT(ItemStack stack) {
+        NBTTagCompound nbtTag = this.getNBTShareTag(stack);
+        if(nbtTag == null) {
+            nbtTag = new NBTTagCompound();
+            stack.setTagCompound(nbtTag);
+        }
+        return nbtTag;
+    }
+
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer player, EnumHand handIn) {
         ItemStack stack = player.getHeldItem(handIn);
+        NBTTagCompound nbtTag = getNBT(stack);
         if(worldIn.isRemote) { // Client Side
             Minecraft.getMinecraft().displayGuiScreen(new GUIDroneTerminal(worldIn,player,handIn));
+        } else { // Server Side
+            if(!nbtTag.hasUniqueId("ownerID")) {
+                nbtTag.setUniqueId("ownerID", player.getUniqueID());
+            }
         }
+        stack.setTagCompound(nbtTag);
         return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
     }
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+        NBTTagCompound nbtTag = getNBT(stack);
         tooltip.add("A Terminal for a Drone");
+        tooltip.add("Owner: " + (nbtTag.hasUniqueId("ownerID") ? nbtTag.getUniqueId("ownerID") : "not available"));
         super.addInformation(stack, worldIn, tooltip, flagIn);
     }
 

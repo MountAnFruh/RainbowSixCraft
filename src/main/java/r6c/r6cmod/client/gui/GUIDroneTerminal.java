@@ -4,12 +4,15 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import r6c.r6cmod.R6CMod;
 
 import java.io.IOException;
+import java.util.UUID;
 
 public class GUIDroneTerminal extends GuiScreen {
 
@@ -26,11 +29,19 @@ public class GUIDroneTerminal extends GuiScreen {
     private World worldIn;
     private EntityPlayer player;
     private EnumHand handIn;
+    private ItemStack stack;
+    private UUID ownerID;
 
     public GUIDroneTerminal(World worldIn, EntityPlayer player, EnumHand handIn) {
         this.worldIn = worldIn;
         this.player = player;
         this.handIn = handIn;
+        this.stack = player.getHeldItem(handIn);
+        NBTTagCompound nbtTag = stack.getTagCompound();
+        ownerID = player.getUniqueID();
+        if(nbtTag.hasUniqueId("ownerID")) {
+            ownerID = nbtTag.getUniqueId("ownerID");
+        }
     }
 
     @Override
@@ -38,7 +49,7 @@ public class GUIDroneTerminal extends GuiScreen {
         this.drawDefaultBackground();
         Minecraft.getMinecraft().renderEngine.bindTexture(texture);
         this.drawTexturedModalRect(guiX,guiY,0,0,guiWidth,guiHeight);
-        this.drawString(fontRenderer, "Drone Terminal", guiX + 18, guiY + 15, 0xFFFFFF);
+        this.drawString(fontRenderer, "Drone Terminal, " + ownerID.toString(), guiX + 18, guiY + 15, 0xFFFFFF);
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
