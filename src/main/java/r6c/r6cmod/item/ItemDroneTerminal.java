@@ -3,20 +3,16 @@ package r6c.r6cmod.item;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import r6c.r6cmod.R6CMod;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import r6c.r6cmod.client.gui.GUIDroneTerminal;
 
 import javax.annotation.Nullable;
@@ -39,18 +35,20 @@ public class ItemDroneTerminal extends Item {
         return nbtTag;
     }
 
+    @SideOnly(value = Side.CLIENT)
+    private void displayGUIDroneTerminal(World worldIn, EntityPlayer player, EnumHand handIn) {
+        Minecraft.getMinecraft().displayGuiScreen(new GUIDroneTerminal(worldIn,player,handIn));
+    }
+
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer player, EnumHand handIn) {
         ItemStack stack = player.getHeldItem(handIn);
         NBTTagCompound nbtTag = getNBT(stack);
-        if(worldIn.isRemote) { // Client Side
-            Minecraft.getMinecraft().displayGuiScreen(new GUIDroneTerminal(worldIn,player,handIn));
-        } else { // Server Side
-            if(!nbtTag.hasUniqueId("ownerID")) {
-                nbtTag.setUniqueId("ownerID", player.getUniqueID());
-            }
+        if(!nbtTag.hasUniqueId("ownerID")) {
+            nbtTag.setUniqueId("ownerID", player.getUniqueID());
         }
         stack.setTagCompound(nbtTag);
+        displayGUIDroneTerminal(worldIn, player, handIn);
         return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
     }
 

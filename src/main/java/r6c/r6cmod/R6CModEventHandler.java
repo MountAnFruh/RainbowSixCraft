@@ -16,6 +16,7 @@ public class R6CModEventHandler {
 
     @SubscribeEvent
     @SideOnly(value = Side.CLIENT)
-    public void mouseEvent(MouseEvent e){
+    public void mouseEvent(InputEvent.MouseInputEvent event){
+
     }
 }

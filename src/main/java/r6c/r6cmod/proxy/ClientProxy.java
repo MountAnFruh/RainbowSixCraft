@@ -22,38 +22,22 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public void preInit(FMLPreInitializationEvent event) {
-        R6CItems.preInit();
-        R6CBlocks.preInit();
+        super.preInit(event);
     }
 
     @Override
     public void init(FMLInitializationEvent event) {
+        super.init(event);
         R6CEntities.init();
     }
 
     @Override
     public void postInit(FMLPostInitializationEvent event) {
-
-    }
-
-    @SubscribeEvent
-    public static void registerBlocks(RegistryEvent.Register<Block> event) {
-        R6CBlocks.registerBlocks(event);
-    }
-
-    @SubscribeEvent
-    public static void registerItems(RegistryEvent.Register<Item> event) {
-        R6CItems.registerItems(event);
-    }
-
-    @SubscribeEvent
-    public static void registerEntities(RegistryEvent.Register<EntityEntry> event) {
-        R6CEntities.registerEntities(event);
+        super.postInit(event);
     }
 
     @SubscribeEvent
     public static void registerRenders(ModelRegistryEvent event) {
         R6CItems.registerRenders(event);
     }
-
 }
