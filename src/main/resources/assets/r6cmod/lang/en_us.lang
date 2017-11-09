@@ -7,6 +7,7 @@ itemGroup.tab_r6c=Rainbow Six Craft
 item.r6c_drone_terminal.name=Drone-Terminal
 item.r6c_drone.name=Drone
 item.shield.r6c_g52tactical.name=G52 Tactical Shield
+item.r6c_weaponpistol.name=Pistol
 
 #Entities
 entity.r6c_drone.name=Drone
