@@ -1,8 +1,13 @@
 package r6c.r6cmod.item;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityOtherPlayerMP;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -14,49 +19,112 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import r6c.r6cmod.client.gui.GUIDroneTerminal;
+import r6c.r6cmod.entity.EntityDrone;
+import r6c.r6cmod.proxy.ClientProxy;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.UUID;
 
 public class ItemDroneTerminal extends Item {
 
+    public final String name;
+
+    private UUID lastGivenID;
+
     public ItemDroneTerminal(String name) {
+        this.name = name;
         this.setUnlocalizedName(name);
         this.setRegistryName(name);
         this.setMaxStackSize(1);
     }
 
-    private NBTTagCompound getNBT(ItemStack stack) {
-        NBTTagCompound nbtTag = this.getNBTShareTag(stack);
-        if(nbtTag == null) {
-            nbtTag = new NBTTagCompound();
-            stack.setTagCompound(nbtTag);
-        }
-        return nbtTag;
+    @Override
+    public void onCreated(ItemStack stack, World worldIn, EntityPlayer playerIn) {
+        super.onCreated(stack, worldIn, playerIn);
+    }
+
+    @Override
+    protected boolean isInCreativeTab(CreativeTabs targetTab) {
+        return false;
     }
 
     @SideOnly(value = Side.CLIENT)
-    private void displayGUIDroneTerminal(World worldIn, EntityPlayer player, EnumHand handIn) {
-        Minecraft.getMinecraft().displayGuiScreen(new GUIDroneTerminal(worldIn,player,handIn));
+    private void displayGUIDroneTerminal(World worldIn, EntityPlayer player, EnumHand handIn, EntityDrone drone) {
+        GUIDroneTerminal guiTerminal;
+        if(drone == null) {
+            guiTerminal = new GUIDroneTerminal(worldIn, player, handIn);
+        } else {
+            guiTerminal = new GUIDroneTerminal(worldIn, player, handIn, drone);
+        }
+        Minecraft.getMinecraft().displayGuiScreen(guiTerminal);
+    }
+
+    public boolean isDroneDead(ItemStack stack, World worldIn) {
+        NBTTagCompound nbtTag = this.getNBTShareTag(stack);
+        if(nbtTag == null) nbtTag = new NBTTagCompound();
+        UUID uniqueIDTerminal = nbtTag.getUniqueId("id");
+        if(worldIn.getEntities(EntityDrone.class, e -> e.getUniqueID().equals(uniqueIDTerminal)).size() > 0) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean processInteract(World worldIn, EntityPlayer player, EnumHand hand, EntityDrone drone) {
+        displayGUIDroneTerminal(worldIn, player, hand, drone);
+        return true;
     }
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer player, EnumHand handIn) {
         ItemStack stack = player.getHeldItem(handIn);
-        NBTTagCompound nbtTag = getNBT(stack);
-        if(!nbtTag.hasUniqueId("ownerID")) {
-            nbtTag.setUniqueId("ownerID", player.getUniqueID());
+        if (!isDroneDead(stack, worldIn)) {
+            NBTTagCompound nbtTag = this.getNBTShareTag(stack);
+            if (nbtTag == null) nbtTag = new NBTTagCompound();
+            if (nbtTag.hasUniqueId("id")) {
+                UUID id = nbtTag.getUniqueId("id");
+                List<EntityDrone> drones = worldIn.getEntities(EntityDrone.class, d -> d.getUniqueID().equals(id));
+                if (drones.size() > 0) {
+                    EntityDrone drone = drones.get(0);
+                    List<Entity> passengers = drone.getPassengers();
+                    if(passengers.isEmpty()) {
+                        drone.mountTo(player);
+                        player.moveForward = 0.0F;
+                        player.moveStrafing = 0.0F;
+                        player.moveVertical = 0.0F;
+                        if(worldIn.isRemote) {
+                            Minecraft mc = Minecraft.getMinecraft();
+                            ClientProxy.hideHand = true;
+                            mc.setRenderViewEntity(drone);
+                        }
+                    } else if (drone.isPassenger(player)){
+                        drone.dismount(player);
+                        drone.setMoveForward(0.0F);
+                        drone.setMoveStrafing(0.0F);
+                        drone.setMoveVertical(0.0F);
+                        if(worldIn.isRemote) {
+                            Minecraft mc = Minecraft.getMinecraft();
+                            ClientProxy.hideHand = false;
+                            mc.setRenderViewEntity(player);
+                        }
+                    }
+                }
+            }
         }
-        stack.setTagCompound(nbtTag);
-        displayGUIDroneTerminal(worldIn, player, handIn);
-        return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
+        return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
     }
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        NBTTagCompound nbtTag = getNBT(stack);
+        NBTTagCompound nbtTag = this.getNBTShareTag(stack);
+        if (nbtTag == null) nbtTag = new NBTTagCompound();
         tooltip.add("A Terminal for a Drone");
-        tooltip.add("Owner: " + (nbtTag.hasUniqueId("ownerID") ? nbtTag.getUniqueId("ownerID") : "not available"));
+        if(flagIn.isAdvanced()) {
+            tooltip.add("ID: " + (nbtTag.hasUniqueId("id") ? nbtTag.getUniqueId("id") : "not set"));
+            if(worldIn != null) {
+                tooltip.add("Drone Dead?: " + isDroneDead(stack, worldIn));
+            }
+        }
         super.addInformation(stack, worldIn, tooltip, flagIn);
     }
 

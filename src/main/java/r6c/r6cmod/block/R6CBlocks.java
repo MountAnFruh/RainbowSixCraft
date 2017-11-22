@@ -26,6 +26,10 @@ public class R6CBlocks {
         }
     }
 
+    public static void init() {
+
+    }
+
     public static void registerBlocks(RegistryEvent.Register<Block> event) {
 
     }
