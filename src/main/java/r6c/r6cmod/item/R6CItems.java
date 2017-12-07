@@ -18,12 +18,14 @@ public class R6CItems {
     public static Item r6c_drone;
     public static Item r6c_g52tactical;
     public static Item r6c_weaponpistol;
+    public static Item r6c_weaponsmg;
 
     public static void preInit() {
         r6cItems.add(r6c_drone_terminal = new ItemDroneTerminal("r6c_drone_terminal"));
         r6cItems.add(r6c_drone = new ItemDrone("r6c_drone"));
         r6cItems.add(r6c_g52tactical = new ItemG52Tactical("r6c_g52tactical"));
         r6cItems.add(r6c_weaponpistol = new ItemWeaponPistol("r6c_weaponpistol"));
+        r6cItems.add(r6c_weaponsmg = new ItemWeaponSMG("r6c_weaponsmg"));
         preInitItems();
     }
 

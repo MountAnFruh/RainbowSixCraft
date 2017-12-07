@@ -17,6 +17,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -63,15 +64,30 @@ public class ItemG52Tactical extends ItemShield
     }
 
     @Override
+    public boolean onEntitySwing(EntityLivingBase entityLiving, ItemStack stack) {
+        return true;
+    }
+
+    @Override
     public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
         EntityLivingBase attacked = (EntityLivingBase) entity;
-        attacked.addPotionEffect(new PotionEffect(Potion.getPotionById(15), 100, 100));
-        player.addPotionEffect(new PotionEffect(Potion.getPotionById(15), 10, 100));
+        attacked.addPotionEffect(new PotionEffect(Potion.getPotionById(15), 100, 100000));
+        player.addPotionEffect(new PotionEffect(Potion.getPotionById(15), 10, 100000));
         return true;
     }
 
     @Override
     public boolean isRepairable() {
+        return false;
+    }
+
+    @Override
+    public boolean canDestroyBlockInCreative(World world, BlockPos pos, ItemStack stack, EntityPlayer player) {
+        return false;
+    }
+
+    @Override
+    public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, EntityPlayer player) {
         return false;
     }
 }

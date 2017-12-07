@@ -1,29 +1,20 @@
 package r6c.r6cmod.item;
 
-import net.minecraft.block.BlockDispenser;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelPlayer;
-import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.projectile.EntityLargeFireball;
-import net.minecraft.item.*;
-import net.minecraft.util.*;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import r6c.r6cmod.entity.EntityBullet;
 
-import javax.annotation.Nullable;
-
-public class ItemWeaponPistol extends Item
+public class ItemWeaponSMG extends Item
 {
-    public ItemWeaponPistol(String name)
-    {
+
+    public ItemWeaponSMG(String name) {
         this.setUnlocalizedName(name);
         this.setRegistryName(name);
         this.setCreativeTab(CreativeTabs.COMBAT);
@@ -44,11 +35,11 @@ public class ItemWeaponPistol extends Item
         return true;
     }
 
-    @Override
-    public boolean onEntitySwing(EntityLivingBase entityLiving, ItemStack stack) {
-        EntityPlayer playerIn = (EntityPlayer)entityLiving;
-        return onItemLeftClick(playerIn.world, playerIn, playerIn.getHeldItemMainhand());
-    }
+//    @Override
+//    public boolean onEntitySwing(EntityLivingBase entityLiving, ItemStack stack) {
+//        EntityPlayer playerIn = (EntityPlayer)entityLiving;
+//        return onItemLeftClick(playerIn.world, playerIn, playerIn.getHeldItemMainhand());
+//    }
 
     @Override
     public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, EntityPlayer player) {
