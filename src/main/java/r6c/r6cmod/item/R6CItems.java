@@ -1,11 +1,12 @@
 package r6c.r6cmod.item;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import r6c.r6cmod.R6CMod;
 
 import java.util.ArrayList;
@@ -33,6 +34,10 @@ public class R6CItems {
         for(Item item : r6cItems) {
             item.setCreativeTab(R6CMod.tabR6CMod);
         }
+    }
+
+    public static void init() {
+
     }
 
     public static void registerItems(RegistryEvent.Register<Item> event) {

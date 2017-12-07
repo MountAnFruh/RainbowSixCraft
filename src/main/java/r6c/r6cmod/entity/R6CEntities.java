@@ -6,8 +6,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import r6c.r6cmod.R6CMod;
 import r6c.r6cmod.client.renderer.entity.RenderBullet;
 import r6c.r6cmod.client.renderer.entity.RenderDrone;
@@ -16,7 +14,7 @@ public class R6CEntities {
 
     private static int id = 0;
     private static final int TRACKINGRANGE = 64;
-    private static final int UPDATEFREQUENCY = 1;
+    private static final int UPDATEFREQUENCY = 3;
 
     public static void init() {
         Minecraft.getMinecraft().getRenderManager().entityRenderMap.put(EntityDrone.class, new RenderDrone(

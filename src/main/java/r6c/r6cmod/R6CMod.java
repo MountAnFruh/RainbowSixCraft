@@ -39,7 +39,6 @@ public class R6CMod {
 
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
-        MinecraftForge.EVENT_BUS.register(new R6CModEventHandler());
         proxy.postInit(event);
     }
 }
