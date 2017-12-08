@@ -13,7 +13,7 @@ import r6c.r6cmod.client.renderer.entity.RenderDrone;
 public class R6CEntities {
 
     private static int id = 0;
-    private static final int TRACKINGRANGE = 64;
+    private static final int TRACKINGRANGE = 256;
     private static final int UPDATEFREQUENCY = 3;
 
     public static void init() {

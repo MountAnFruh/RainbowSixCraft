@@ -12,10 +12,8 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import r6c.r6cmod.entity.R6CEntities;
 import r6c.r6cmod.item.R6CItems;
 
@@ -47,14 +45,6 @@ public class ClientProxy extends CommonProxy {
     public static void renderPlayerPost(RenderPlayerEvent.Post event) {
         event.getRenderer().getRenderManager().renderViewEntity = renderViewEntity;
         renderViewEntity = null;
-    }
-
-    @SubscribeEvent
-    public static void breakBlock(BlockEvent.BreakEvent event) {
-        Minecraft mc = Minecraft.getMinecraft();
-        if(!(mc.getRenderViewEntity() instanceof EntityPlayerSP)) {
-            event.setCanceled(true);
-        }
     }
 
     @Override

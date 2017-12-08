@@ -1,6 +1,7 @@
 package r6c.r6cmod;
 
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;

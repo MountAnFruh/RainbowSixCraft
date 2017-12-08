@@ -13,6 +13,7 @@ public class AnimationHandlerDrone extends AnimationHandler {
     static
     {
         animChannels.put("driveAnimation", new ChannelDriveAnimation("driveAnimation", 30.0F, 60, Channel.LOOP));
+        animChannels.put("backdriveAnimation", new ChannelBackDriveAnimation("backdriveAnimation", 30.0F, 60, Channel.LOOP));
     }
 
     public AnimationHandlerDrone(IMCAnimatedEntity entity) {

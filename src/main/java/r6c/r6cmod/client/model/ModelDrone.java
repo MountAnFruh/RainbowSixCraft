@@ -48,7 +48,7 @@ public class ModelDrone extends ModelBase {
         base.mirror = false;
         base.addBox(-30.0F, 15.0F, -5.0F, 60, 10, 10);
         base.setInitialRotationPoint(0.0F, -30.0F, 0.0F);
-        base.setInitialRotationMatrix(new Matrix4f().set(new Quaternion(0.0F, 0.0F, 0.0F, 1.0F)).transpose());
+        base.setInitialRotationMatrix(new Matrix4f().set(new Quaternion(0.0F, 1.0F, 0.0F, -4.371139E-8F)).transpose());
         base.setTextureSize(textureWidth, textureHeight);
         parts.put(base.boxName, base);
 
