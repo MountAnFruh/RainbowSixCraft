@@ -2,6 +2,7 @@ package r6c.r6cmod.client.model;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.math.Vec3d;
 import r6c.r6cmod.entity.EntityDrone;
 import r6c.r6cmod.mcalibrary.MCACommonLibrary.MCAVersionChecker;
 import r6c.r6cmod.mcalibrary.MCACommonLibrary.animation.AnimationHandler;

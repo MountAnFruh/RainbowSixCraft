@@ -7,13 +7,17 @@ import r6c.r6cmod.mcalibrary.MCACommonLibrary.animation.Channel;
 import java.util.HashMap;
 
 public class AnimationHandlerDrone extends AnimationHandler {
+
+    public static final String DRIVEANIMATION = "driveAnimation";
+    public static final String BACKDRIVEANIMATION = "backdriveAnimation";
+
     /** Map with all the animations. */
     public static HashMap<String, Channel> animChannels = new HashMap<String, Channel>();
 
     static
     {
-        animChannels.put("driveAnimation", new ChannelDriveAnimation("driveAnimation", 30.0F, 60, Channel.LOOP));
-        animChannels.put("backdriveAnimation", new ChannelBackDriveAnimation("backdriveAnimation", 30.0F, 60, Channel.LOOP));
+        animChannels.put("driveAnimation", new ChannelDriveAnimation(DRIVEANIMATION, 30.0F, 60, Channel.LOOP));
+        animChannels.put("backdriveAnimation", new ChannelBackDriveAnimation(BACKDRIVEANIMATION, 30.0F, 60, Channel.LOOP));
     }
 
     public AnimationHandlerDrone(IMCAnimatedEntity entity) {

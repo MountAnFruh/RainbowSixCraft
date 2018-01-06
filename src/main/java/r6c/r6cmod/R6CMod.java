@@ -9,6 +9,8 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import r6c.r6cmod.proxy.CommonProxy;
 
 @Mod(modid = R6CMod.MODID, name = R6CMod.NAME, version = R6CMod.VERSION)
@@ -30,6 +32,7 @@ public class R6CMod {
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         tabR6CMod = new CreativeTabR6CMod(CreativeTabs.getNextID(), "tab_r6c");
+        ForgeChunkManager.setForcedChunkLoadingCallback(R6CMod.instance, null);
         proxy.preInit(event);
     }
 

@@ -65,9 +65,6 @@ public class GUIDroneTerminal extends GuiScreen {
         if(drone != null) {
             this.drawString(fontRenderer, "Drone-ID: " + drone.getUniqueID(), minX + 2, minY + fontRenderer.FONT_HEIGHT + 4, 0xFFFFFF);
         }
-        if(((ItemDroneTerminal)stack.getItem()).isDroneDead(stack, worldIn)) {
-            this.drawString(fontRenderer, "Your Drone is dead fam", minX + 2 + fontRenderer.getStringWidth("Exit") + 20 + 2, maxY - fontRenderer.FONT_HEIGHT - 2, 0xFFFFFF);
-        }
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 

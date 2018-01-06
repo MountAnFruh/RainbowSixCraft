@@ -19,6 +19,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import r6c.r6cmod.client.gui.GUIDroneTerminal;
+import r6c.r6cmod.client.gui.GUIDroneTerminalDrive;
 import r6c.r6cmod.entity.EntityDrone;
 import r6c.r6cmod.proxy.ClientProxy;
 
@@ -30,8 +31,6 @@ public class ItemDroneTerminal extends Item {
 
     public final String name;
 
-    private UUID lastGivenID;
-
     public ItemDroneTerminal(String name) {
         this.name = name;
         this.setUnlocalizedName(name);
@@ -40,8 +39,19 @@ public class ItemDroneTerminal extends Item {
     }
 
     @Override
-    public void onCreated(ItemStack stack, World worldIn, EntityPlayer playerIn) {
-        super.onCreated(stack, worldIn, playerIn);
+    public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+//        if(!worldIn.isRemote) {
+        if(worldIn.isRemote) {
+            NBTTagCompound nbtTag = this.getNBTShareTag(stack);
+            if(nbtTag == null) nbtTag = new NBTTagCompound();
+            final UUID uniqueID = nbtTag.getUniqueId("id");
+            if(worldIn.getEntities(EntityDrone.class, e -> e.getUniqueID().equals(uniqueID)).size() > 0) {
+                nbtTag.setBoolean("dronedead",false);
+            } else {
+                nbtTag.setBoolean("dronedead",true);
+            }
+        }
+        super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
     }
 
     @Override
@@ -60,27 +70,23 @@ public class ItemDroneTerminal extends Item {
         Minecraft.getMinecraft().displayGuiScreen(guiTerminal);
     }
 
-    public boolean isDroneDead(ItemStack stack, World worldIn) {
-        NBTTagCompound nbtTag = this.getNBTShareTag(stack);
-        if(nbtTag == null) nbtTag = new NBTTagCompound();
-        UUID uniqueIDTerminal = nbtTag.getUniqueId("id");
-        if(worldIn.getEntities(EntityDrone.class, e -> e.getUniqueID().equals(uniqueIDTerminal)).size() > 0) {
-            return false;
-        }
-        return true;
-    }
-
     public boolean processInteract(World worldIn, EntityPlayer player, EnumHand hand, EntityDrone drone) {
         displayGUIDroneTerminal(worldIn, player, hand, drone);
         return true;
     }
 
+    @SideOnly(value = Side.CLIENT)
+    public void displayDriveScreen(World worldIn, EntityPlayer player, EnumHand handIn, EntityDrone drone) {
+        GUIDroneTerminalDrive guiDriveTerminal = new GUIDroneTerminalDrive(worldIn, player, handIn, drone);
+        Minecraft.getMinecraft().displayGuiScreen(guiDriveTerminal);
+    }
+
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer player, EnumHand handIn) {
         ItemStack stack = player.getHeldItem(handIn);
-        if (!isDroneDead(stack, worldIn)) {
-            NBTTagCompound nbtTag = this.getNBTShareTag(stack);
-            if (nbtTag == null) nbtTag = new NBTTagCompound();
+        NBTTagCompound nbtTag = this.getNBTShareTag(stack);
+        if (nbtTag == null) nbtTag = new NBTTagCompound();
+        if (!nbtTag.getBoolean("dronedead")) {
             if (nbtTag.hasUniqueId("id")) {
                 UUID id = nbtTag.getUniqueId("id");
                 List<EntityDrone> drones = worldIn.getEntities(EntityDrone.class, d -> d.getUniqueID().equals(id));
@@ -93,20 +99,13 @@ public class ItemDroneTerminal extends Item {
                         player.moveStrafing = 0.0F;
                         player.moveVertical = 0.0F;
                         if(worldIn.isRemote) {
-                            Minecraft mc = Minecraft.getMinecraft();
-                            ClientProxy.hideHand = true;
-                            mc.setRenderViewEntity(drone);
+                            displayDriveScreen(worldIn, player, handIn, drone);
                         }
                     } else if (drone.isPassenger(player)){
                         drone.dismount(player);
                         drone.setMoveForward(0.0F);
                         drone.setMoveStrafing(0.0F);
                         drone.setMoveVertical(0.0F);
-                        if(worldIn.isRemote) {
-                            Minecraft mc = Minecraft.getMinecraft();
-                            ClientProxy.hideHand = false;
-                            mc.setRenderViewEntity(player);
-                        }
                     }
                 }
             }
@@ -122,7 +121,7 @@ public class ItemDroneTerminal extends Item {
         if(flagIn.isAdvanced()) {
             tooltip.add("ID: " + (nbtTag.hasUniqueId("id") ? nbtTag.getUniqueId("id") : "not set"));
             if(worldIn != null) {
-                tooltip.add("Drone Dead?: " + isDroneDead(stack, worldIn));
+                tooltip.add("Drone Dead?: " + nbtTag.getBoolean("dronedead"));
             }
         }
         super.addInformation(stack, worldIn, tooltip, flagIn);
