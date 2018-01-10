@@ -19,7 +19,6 @@ import r6c.r6cmod.entity.EntityBullet;
 @SideOnly(Side.CLIENT)
 public class RenderBullet extends Render<EntityBullet>
 {
-    private final ResourceLocation BULLET_TEXTURE = new ResourceLocation(R6CMod.MODID, "textures/items/r6c_bullet.png");
     private final float scale;
 
     public RenderBullet(RenderManager renderManagerIn, float scaleIn)
@@ -45,9 +44,6 @@ public class RenderBullet extends Render<EntityBullet>
         float f1 = textureatlassprite.getMaxU();
         float f2 = textureatlassprite.getMinV();
         float f3 = textureatlassprite.getMaxV();
-        float f4 = 1.0F;
-        float f5 = 0.5F;
-        float f6 = 0.25F;
         GlStateManager.rotate(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
         GlStateManager.rotate((float)(this.renderManager.options.thirdPersonView == 2 ? -1 : 1) * -this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
 

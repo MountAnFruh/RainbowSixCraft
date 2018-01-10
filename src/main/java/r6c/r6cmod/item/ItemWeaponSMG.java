@@ -35,11 +35,11 @@ public class ItemWeaponSMG extends Item
         return true;
     }
 
-//    @Override
-//    public boolean onEntitySwing(EntityLivingBase entityLiving, ItemStack stack) {
-//        EntityPlayer playerIn = (EntityPlayer)entityLiving;
-//        return onItemLeftClick(playerIn.world, playerIn, playerIn.getHeldItemMainhand());
-//    }
+    @Override
+    public boolean onEntitySwing(EntityLivingBase entityLiving, ItemStack stack) {
+        EntityPlayer playerIn = (EntityPlayer)entityLiving;
+        return onItemLeftClick(playerIn.world, playerIn, playerIn.getHeldItemMainhand());
+    }
 
     @Override
     public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, EntityPlayer player) {
