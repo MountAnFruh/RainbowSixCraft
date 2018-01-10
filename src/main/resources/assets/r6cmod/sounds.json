@@ -1,0 +1,32 @@
+{
+  "r6c_drone_driving": {
+    "sounds": [
+      "r6cmod:r6c_drone_driving_short"
+    ]
+  },
+  "r6c_drone_jumping": {
+    "sounds": [
+      "r6cmod:r6c_drone_jumping"
+    ]
+  },
+  "r6c_drone_floor_landing": {
+    "sounds": [
+      "r6cmod:r6c_drone_floor_landing"
+    ]
+  },
+  "r6c_drone_jump_reload": {
+    "sounds": [
+      "r6cmod:r6c_drone_jump_reload"
+    ]
+  },
+  "r6c_drone_switch": {
+    "sounds": [
+      "r6cmod:r6c_drone_switch"
+    ]
+  },
+  "r6c_drone_destroyed": {
+    "sounds": [
+      "r6cmod:r6c_drone_destroyed"
+    ]
+  }
+}

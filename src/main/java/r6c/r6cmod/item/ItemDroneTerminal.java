@@ -18,6 +18,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import r6c.r6cmod.R6CSounds;
 import r6c.r6cmod.client.gui.GUIDroneTerminal;
 import r6c.r6cmod.client.gui.GUIDroneTerminalDrive;
 import r6c.r6cmod.entity.EntityDrone;
@@ -60,22 +61,6 @@ public class ItemDroneTerminal extends Item {
     }
 
     @SideOnly(value = Side.CLIENT)
-    private void displayGUIDroneTerminal(World worldIn, EntityPlayer player, EnumHand handIn, EntityDrone drone) {
-        GUIDroneTerminal guiTerminal;
-        if(drone == null) {
-            guiTerminal = new GUIDroneTerminal(worldIn, player, handIn);
-        } else {
-            guiTerminal = new GUIDroneTerminal(worldIn, player, handIn, drone);
-        }
-        Minecraft.getMinecraft().displayGuiScreen(guiTerminal);
-    }
-
-    public boolean processInteract(World worldIn, EntityPlayer player, EnumHand hand, EntityDrone drone) {
-        displayGUIDroneTerminal(worldIn, player, hand, drone);
-        return true;
-    }
-
-    @SideOnly(value = Side.CLIENT)
     public void displayDriveScreen(World worldIn, EntityPlayer player, EnumHand handIn, EntityDrone drone) {
         GUIDroneTerminalDrive guiDriveTerminal = new GUIDroneTerminalDrive(worldIn, player, handIn, drone);
         Minecraft.getMinecraft().displayGuiScreen(guiDriveTerminal);
@@ -98,6 +83,7 @@ public class ItemDroneTerminal extends Item {
                         player.moveForward = 0.0F;
                         player.moveStrafing = 0.0F;
                         player.moveVertical = 0.0F;
+                        player.playSound(R6CSounds.r6c_drone_switch, 1.0F, 1.0F);
                         if(worldIn.isRemote) {
                             displayDriveScreen(worldIn, player, handIn, drone);
                         }
@@ -106,6 +92,7 @@ public class ItemDroneTerminal extends Item {
                         drone.setMoveForward(0.0F);
                         drone.setMoveStrafing(0.0F);
                         drone.setMoveVertical(0.0F);
+                        player.playSound(R6CSounds.r6c_drone_switch, 1.0F, 1.0F);
                     }
                 }
             }

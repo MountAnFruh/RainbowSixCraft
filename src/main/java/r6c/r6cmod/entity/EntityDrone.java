@@ -1,49 +1,33 @@
 package r6c.r6cmod.entity;
 
-import com.sun.javafx.geom.Vec3f;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.client.settings.GameSettings;
-import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.*;
-import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.play.client.CPacketEntityAction;
-import net.minecraft.network.play.client.CPacketInput;
-import net.minecraft.network.play.client.CPacketPlayer;
-import net.minecraft.network.play.client.CPacketVehicleMove;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.*;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeChunkManager;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
-import r6c.r6cmod.R6CMod;
+import r6c.r6cmod.R6CSounds;
 import r6c.r6cmod.client.animation.AnimationHandlerDrone;
 import r6c.r6cmod.item.ItemDroneTerminal;
 import r6c.r6cmod.item.R6CItems;
 import r6c.r6cmod.mcalibrary.MCACommonLibrary.IMCAnimatedEntity;
 import r6c.r6cmod.mcalibrary.MCACommonLibrary.animation.AnimationHandler;
-import r6c.r6cmod.networking.R6CPacketHandler;
 import r6c.r6cmod.proxy.ClientProxy;
 
 import javax.annotation.Nullable;
-import java.util.Arrays;
-import java.util.Set;
 import java.util.UUID;
 
 public class EntityDrone extends EntityLiving implements IMCAnimatedEntity {
@@ -51,13 +35,8 @@ public class EntityDrone extends EntityLiving implements IMCAnimatedEntity {
     protected static final String NAME = "r6c_entity_drone";
     protected AnimationHandler animHandler = new AnimationHandlerDrone(this);
 
-    private int jumpCooldown;
-    private final int maxJumpCooldown = 30;
-
-    private int prevChunkX;
-    private int prevChunkZ;
-
-    private ForgeChunkManager.Ticket ticket;
+    public int jumpCooldown;
+    private final int maxJumpCooldown = 35;
 
     private double prevPosX_Animation;
     private double prevPosY_Animation;
@@ -116,7 +95,6 @@ public class EntityDrone extends EntityLiving implements IMCAnimatedEntity {
         if(mc.getRenderViewEntity() == this) {
             mc.setRenderViewEntity(mc.player);
         }
-        ForgeChunkManager.releaseTicket(this.ticket);
         super.onDeath(cause);
     }
 
@@ -175,50 +153,6 @@ public class EntityDrone extends EntityLiving implements IMCAnimatedEntity {
         return true;
     }
 
-    public void onChunkLoadUpdate() {
-        if(this.ticket == null) {
-            this.ticket = ForgeChunkManager.requestTicket(R6CMod.instance, this.world, ForgeChunkManager.Type.ENTITY);
-            this.ticket.bindEntity(this);
-        }
-        if(this.ticket == null) return;
-
-        int chunkX = (int)(this.posX / 16.0D);
-        int chunkZ = (int)(this.posZ / 16.0D);
-        this.chunkCoordX = chunkX;
-        this.chunkCoordZ = chunkZ;
-
-        int radius = 1;
-
-        Set<ChunkPos> loadedChunks = this.ticket.getChunkList();
-
-        if(prevChunkX != chunkX || prevChunkZ != chunkZ) {
-            if(!this.world.isRemote) {
-                for(ChunkPos pos : loadedChunks) {
-                    if(pos.x < chunkX - radius || pos.x > chunkX + radius ||
-                       pos.z < chunkZ - radius || pos.z > chunkZ + radius) {
-                        ForgeChunkManager.unforceChunk(this.ticket, pos);
-                    }
-                }
-                for(int i = -radius;i <= radius;i++) {
-                    for(int j = -radius;j <= radius;j++) {
-                        boolean containsPos = false;
-                        for(ChunkPos pos : loadedChunks) {
-                            if(pos.x == chunkX + i && pos.z == chunkZ + j) {
-                                containsPos = true;
-                            }
-                        }
-                        if(!containsPos) {
-                            ForgeChunkManager.forceChunk(this.ticket, new ChunkPos(chunkX + i, chunkZ + j));
-                        }
-                    }
-                }
-            }
-        }
-
-        prevChunkX = chunkX;
-        prevChunkZ = chunkZ;
-    }
-
     @SideOnly(value = Side.CLIENT)
     public void updateDroneMoveState()
     {
@@ -227,7 +161,7 @@ public class EntityDrone extends EntityLiving implements IMCAnimatedEntity {
 
         float moveStrafe = 0.0F;
         float moveForward = 0.0F;
-        boolean jump, sneak;
+        boolean jump;
 
         if (Keyboard.isKeyDown(gameSettings.keyBindForward.getKeyCode()))
         {
@@ -250,18 +184,10 @@ public class EntityDrone extends EntityLiving implements IMCAnimatedEntity {
         }
 
         jump = Keyboard.isKeyDown(gameSettings.keyBindJump.getKeyCode());
-        sneak = Keyboard.isKeyDown(gameSettings.keyBindSneak.getKeyCode());
-
-        if (sneak)
-        {
-            moveStrafe = (float)((double)moveStrafe * 0.3D);
-            moveForward = (float)((double)moveForward * 0.3D);
-        }
 
         this.setMoveStrafing(moveStrafe);
         this.setMoveForward(moveForward);
         this.setJumping(jump);
-        this.setSneaking(sneak);
 
         int dx = Mouse.getDX();
         int dy = Mouse.getDY();
@@ -308,30 +234,34 @@ public class EntityDrone extends EntityLiving implements IMCAnimatedEntity {
         } else {
             animHandler.stopAnimation(AnimationHandlerDrone.DRIVEANIMATION);
         }
-//        if(this.moveForward > 0 || this.moveStrafing != 0 || this.moveVertical != 0) {
-//            animHandler.stopAnimation(AnimationHandlerDrone.BACKDRIVEANIMATION);
-//            if (!animHandler.isAnimationActive(AnimationHandlerDrone.DRIVEANIMATION)) {
-//                animHandler.activateAnimation(AnimationHandlerDrone.DRIVEANIMATION, 0);
-//            }
-//        } else if(this.moveForward < 0){
-//            animHandler.stopAnimation(AnimationHandlerDrone.DRIVEANIMATION);
-//            if (!animHandler.isAnimationActive(AnimationHandlerDrone.BACKDRIVEANIMATION)) {
-//                animHandler.activateAnimation(AnimationHandlerDrone.BACKDRIVEANIMATION, 0);
-//            }
-//        } else {
-//            animHandler.stopAnimation(AnimationHandlerDrone.DRIVEANIMATION);
-//            animHandler.stopAnimation(AnimationHandlerDrone.BACKDRIVEANIMATION);
-//        }
         super.onLivingUpdate();
-        this.onChunkLoadUpdate();
     }
 
     @Override
     public void fall(float distance, float damageMultiplier) {
         super.fall(distance, damageMultiplier);
         if(onGround) {
-            jumpCooldown = maxJumpCooldown;
+            this.playSound(R6CSounds.r6c_drone_floor_landing, 1.0F, 1.0F);
+            if(jumpCooldown <= 0) {
+                jumpCooldown = maxJumpCooldown;
+                this.playSound(R6CSounds.r6c_drone_jump_reload, 1.0F, 1.0F);
+            }
         }
+    }
+
+    @Override
+    public void playSound(SoundEvent soundIn, float volume, float pitch) {
+        if(this.getControllingPassenger() != null) {
+            Entity entity = this.getControllingPassenger();
+            entity.playSound(soundIn, volume, pitch);
+            return;
+        }
+        super.playSound(soundIn, volume, pitch);
+    }
+
+    @Override
+    protected void playStepSound(BlockPos pos, Block blockIn) {
+        this.playSound(R6CSounds.r6c_drone_driving, 1.0F, 1.0F);
     }
 
     @Override
@@ -345,6 +275,7 @@ public class EntityDrone extends EntityLiving implements IMCAnimatedEntity {
             }
             if (this.rotationPitch < 0) {
                 this.addVelocity(lookVec.x * multiplier, lookVec.y * multiplier + 0.2, lookVec.z * multiplier);
+                this.playSound(R6CSounds.r6c_drone_jumping, 1.0F, 1.0F);
             }
         }
     }
@@ -407,9 +338,6 @@ public class EntityDrone extends EntityLiving implements IMCAnimatedEntity {
                         return true;
                     }
                 }
-            } else {
-                ItemDroneTerminal terminal = (ItemDroneTerminal) stack.getItem();
-                return terminal.processInteract(world, player, hand, this);
             }
         }
         return false;
@@ -423,22 +351,19 @@ public class EntityDrone extends EntityLiving implements IMCAnimatedEntity {
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
-        // TODO: Add Ambient Sound
-        return super.getAmbientSound();
+        return null;
     }
 
     @Nullable
     @Override
     protected SoundEvent getDeathSound() {
-        // TODO: Add Death Sound
-        return super.getDeathSound();
+        return R6CSounds.r6c_drone_destroyed;
     }
 
     @Nullable
     @Override
     protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
-        // TODO: Maybe add Hurt Sound if the drone has more health than usual
-        return super.getHurtSound(p_184601_1_);
+        return null;
     }
 
     @Override

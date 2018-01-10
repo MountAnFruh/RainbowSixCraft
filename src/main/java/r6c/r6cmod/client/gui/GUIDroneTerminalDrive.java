@@ -36,6 +36,7 @@ public class GUIDroneTerminalDrive extends GuiScreen {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
+        this.drawString(this.fontRenderer, "Cooldown: " + drone.jumpCooldown, 10 , 10, 0xFFFFFF);
     }
 
     @Override
@@ -46,7 +47,7 @@ public class GUIDroneTerminalDrive extends GuiScreen {
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
-        if(typedChar == 'e') {
+        if(keyCode == 42) {
             Minecraft.getMinecraft().displayGuiScreen(null);
         }
         super.keyTyped(typedChar, keyCode);
