@@ -38,6 +38,12 @@ public class EntityBullet extends EntityFireball{
         this.accelerationZ = accelZ / d0 * 0.1D;
     }
 
+    public EntityBullet(World worldIn)
+    {
+        super(worldIn);
+        this.setSize(1.0F, 1.0F);
+    }
+
     @Override
     protected void onImpact(RayTraceResult result)
     {
