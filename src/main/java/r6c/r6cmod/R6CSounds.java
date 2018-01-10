@@ -27,6 +27,10 @@ public class R6CSounds {
             .setRegistryName("r6c_g52tactical_reload");
     public static SoundEvent r6c_g52tactical_use = new SoundEvent(new ResourceLocation(R6CMod.MODID, "r6c_g52tactical_use"))
             .setRegistryName("r6c_g52tactical_use");
+    public static SoundEvent r6c_pistolsound = new SoundEvent(new ResourceLocation(R6CMod.MODID, "r6c_pistolsound"))
+            .setRegistryName("r6c_pistolsound");
+    public static SoundEvent r6c_smgsound = new SoundEvent(new ResourceLocation(R6CMod.MODID, "r6c_smgsound"))
+            .setRegistryName("r6c_smgsound");
 
     public static void registerSounds(RegistryEvent.Register<SoundEvent> event) {
         r6cSounds.add(r6c_drone_driving);

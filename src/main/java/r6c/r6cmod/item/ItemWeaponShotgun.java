@@ -22,7 +22,6 @@ import javax.annotation.Nullable;
 
 public class ItemWeaponShotgun extends Item
 {
-    private int coolDown = 0;
 
     public ItemWeaponShotgun(String name)
     {
@@ -35,34 +34,27 @@ public class ItemWeaponShotgun extends Item
     @Override
     public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
         super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
-//        if (coolDown > 0)
-//        {
-//            coolDown--;
-//        }
     }
 
     public boolean onItemLeftClick(World worldIn, EntityPlayer playerIn, ItemStack itemstack) {
-//        if (coolDown == 0)
-//        {
-        itemstack.damageItem(10, playerIn);
-        //if (!worldIn.isRemote)
-        //{
+        if (!worldIn.isRemote)
+        {
+            double x = playerIn.posX;
+            double y = playerIn.posY + playerIn.getEyeHeight();
+            double z = playerIn.posZ;
             Vec3d look = playerIn.getLookVec();
-            EntityBullet bullet = new EntityBullet(worldIn, playerIn, look.x * 2, look.y * 2, look.z * 2);
+            EntityBullet bullet = new EntityBullet(worldIn, playerIn, look.x * 2, look.y * 2, look.z * 2,x,y,z);
             worldIn.spawnEntity(bullet);
-            EntityBullet bullet1 = new EntityBullet(worldIn, playerIn, look.x * 2, look.y * 2, look.z * 2);
+            EntityBullet bullet1 = new EntityBullet(worldIn, playerIn, look.x * 2, look.y * 2, look.z * 2,x,y,z);
             worldIn.spawnEntity(bullet1);
-            EntityBullet bullet2 = new EntityBullet(worldIn, playerIn, look.x * 2, look.y * 2, look.z * 2);
+            EntityBullet bullet2 = new EntityBullet(worldIn, playerIn, look.x * 2, look.y * 2, look.z * 2,x,y,z);
             worldIn.spawnEntity(bullet2);
-            EntityBullet bullet3 = new EntityBullet(worldIn, playerIn, look.x * 2, look.y * 2, look.z * 2);
+            EntityBullet bullet3 = new EntityBullet(worldIn, playerIn, look.x * 2, look.y * 2, look.z * 2,x,y,z);
             worldIn.spawnEntity(bullet3);
-            EntityBullet bullet4 = new EntityBullet(worldIn, playerIn, look.x * 2, look.y * 2, look.z * 2);
+            EntityBullet bullet4 = new EntityBullet(worldIn, playerIn, look.x * 2, look.y * 2, look.z * 2,x,y,z);
             worldIn.spawnEntity(bullet4);
-       // }
-//            coolDown += 2;
+        }
         return true;
-//        }
-//        return false;
     }
 
     @Override

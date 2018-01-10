@@ -4,6 +4,7 @@ import net.minecraft.block.BlockDispenser;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelPlayer;
 import net.minecraft.client.renderer.entity.RenderPlayer;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -16,9 +17,11 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import r6c.r6cmod.R6CSounds;
 import r6c.r6cmod.entity.EntityBullet;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 public class ItemWeaponPistol extends Item
 {
@@ -31,7 +34,7 @@ public class ItemWeaponPistol extends Item
     }
 
     public boolean onItemLeftClick(World worldIn, EntityPlayer playerIn, ItemStack itemstack) {
-        itemstack.damageItem(10, playerIn);
+        playerIn.playSound(R6CSounds.r6c_pistolsound, 1.0F, 1.0F);
         if (!worldIn.isRemote)
         {
             double x = playerIn.posX;
@@ -58,5 +61,16 @@ public class ItemWeaponPistol extends Item
     @Override
     public boolean canDestroyBlockInCreative(World world, BlockPos pos, ItemStack stack, EntityPlayer player) {
         return false;
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+        tooltip.add(".45 caliber semi-automatic pistol that has a low recoil, best used in mid-range combat");
+        super.addInformation(stack, worldIn, tooltip, flagIn);
+    }
+
+    @Override
+    public EnumRarity getRarity(ItemStack stack) {
+        return EnumRarity.RARE;
     }
 }

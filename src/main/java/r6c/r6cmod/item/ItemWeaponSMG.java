@@ -1,15 +1,21 @@
 package r6c.r6cmod.item;
 
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import r6c.r6cmod.R6CSounds;
 import r6c.r6cmod.entity.EntityBullet;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class ItemWeaponSMG extends Item
 {
@@ -22,7 +28,7 @@ public class ItemWeaponSMG extends Item
     }
 
     public boolean onItemLeftClick(World worldIn, EntityPlayer playerIn, ItemStack itemstack) {
-        itemstack.damageItem(10, playerIn);
+        playerIn.playSound(R6CSounds.r6c_smgsound, 1.0F, 1.0F);
         if (!worldIn.isRemote)
         {
             double x = playerIn.posX;
@@ -49,5 +55,16 @@ public class ItemWeaponSMG extends Item
     @Override
     public boolean canDestroyBlockInCreative(World world, BlockPos pos, ItemStack stack, EntityPlayer player) {
         return false;
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+        tooltip.add("Short to medium range submachine gun. High rate of fire and mobility. Favored by GIGN");
+        super.addInformation(stack, worldIn, tooltip, flagIn);
+    }
+
+    @Override
+    public EnumRarity getRarity(ItemStack stack) {
+        return EnumRarity.RARE;
     }
 }

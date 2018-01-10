@@ -3,6 +3,7 @@ package r6c.r6cmod.item;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.BlockDispenser;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -19,6 +20,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import r6c.r6cmod.R6CSounds;
+
+import java.util.List;
 
 public class ItemG52Tactical extends ItemShield
 {
@@ -85,5 +88,16 @@ public class ItemG52Tactical extends ItemShield
     @Override
     public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, EntityPlayer player) {
         return false;
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+        tooltip.add("Triggers the flash attached to his ballistic shield to temporarily blind enemies");
+        super.addInformation(stack, worldIn, tooltip, flagIn);
+    }
+
+    @Override
+    public EnumRarity getRarity(ItemStack stack) {
+        return EnumRarity.RARE;
     }
 }

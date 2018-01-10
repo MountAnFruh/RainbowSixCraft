@@ -1,4 +1,14 @@
 {
+  "r6c_pistolsound": {
+    "sounds": [
+      "r6cmod:r6c_pistolsound"
+    ]
+  },
+  "r6c_smgsound": {
+    "sounds": [
+      "r6cmod:r6c_smgsound"
+    ]
+  },
   "r6c_g52tactical_reload": {
     "sounds": [
       "r6cmod:r6c_g52tactical_reload"
