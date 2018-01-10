@@ -18,11 +18,13 @@ public class EntityBullet extends EntityFireball{
 
     protected static final String NAME = "r6c_entity_bullet";
     private int ticksInAir;
+    private int damage;
     private static Random rand2 = new Random();
 
-    public EntityBullet(World worldIn, EntityPlayer shooter, double accelX, double accelY, double accelZ, double x, double y, double z) {
+    public EntityBullet(World worldIn, EntityPlayer shooter, double accelX, double accelY, double accelZ, double x, double y, double z, int damage) {
         super(worldIn);
         this.shootingEntity = shooter;
+        this.damage = damage;
         this.setSize(1.0F, 1.0F);
         this.setLocationAndAngles(shooter.posX, shooter.posY, shooter.posZ, shooter.rotationYaw, shooter.rotationPitch);
         this.setPosition(x, y, z);
@@ -51,7 +53,7 @@ public class EntityBullet extends EntityFireball{
         {
             if (result.entityHit != null)
             {
-                result.entityHit.attackEntityFrom(DamageSource.causePlayerDamage((EntityPlayer) this.shootingEntity), 1.0F);
+                result.entityHit.attackEntityFrom(DamageSource.causePlayerDamage((EntityPlayer) this.shootingEntity), damage);
                 this.applyEnchantments(this.shootingEntity, result.entityHit);
             }
             this.setDead();
@@ -60,7 +62,6 @@ public class EntityBullet extends EntityFireball{
 
     @Override
     public void onUpdate() {
-        System.out.println(this.getUniqueID() + " " + accelerationX + " " + accelerationY + " " + accelerationZ);
         if (this.world.isRemote || (this.shootingEntity == null || !this.shootingEntity.isDead) && this.world.isBlockLoaded(new BlockPos(this)))
         {
             if (!this.world.isRemote)

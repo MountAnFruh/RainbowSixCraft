@@ -41,6 +41,8 @@ public class R6CSounds {
         r6cSounds.add(r6c_drone_destroyed);
         r6cSounds.add(r6c_g52tactical_reload);
         r6cSounds.add(r6c_g52tactical_use);
+        r6cSounds.add(r6c_pistolsound);
+        r6cSounds.add(r6c_smgsound);
         event.getRegistry().registerAll(r6cSounds.toArray(new SoundEvent[0]));
     }
 }

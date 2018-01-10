@@ -68,7 +68,7 @@ public class ItemG52Tactical extends ItemShield
         if(useCooldown <= 0) {
             EntityLivingBase attacked = (EntityLivingBase) entity;
             attacked.addPotionEffect(new PotionEffect(Potion.getPotionById(15), 100, 100000));
-            player.playSound(R6CSounds.r6c_g52tactical_use, 1.0F, 1.0F);
+            player.world.playSound(null, player.posX, player.posY, player.posZ, R6CSounds.r6c_g52tactical_use, player.getSoundCategory(), 1.0F, 1.0F);
             useCooldown = MAXUSECOOLDOWN;
             player.playSound(R6CSounds.r6c_g52tactical_reload, 1.0F, 1.0F);
         }

@@ -43,15 +43,15 @@ public class ItemWeaponShotgun extends Item
             double y = playerIn.posY + playerIn.getEyeHeight();
             double z = playerIn.posZ;
             Vec3d look = playerIn.getLookVec();
-            EntityBullet bullet = new EntityBullet(worldIn, playerIn, look.x * 2, look.y * 2, look.z * 2,x,y,z);
+            EntityBullet bullet = new EntityBullet(worldIn, playerIn, look.x * 2, look.y * 2, look.z * 2,x,y,z, 3);
             worldIn.spawnEntity(bullet);
-            EntityBullet bullet1 = new EntityBullet(worldIn, playerIn, look.x * 2, look.y * 2, look.z * 2,x,y,z);
+            EntityBullet bullet1 = new EntityBullet(worldIn, playerIn, look.x * 2, look.y * 2, look.z * 2,x,y,z, 3);
             worldIn.spawnEntity(bullet1);
-            EntityBullet bullet2 = new EntityBullet(worldIn, playerIn, look.x * 2, look.y * 2, look.z * 2,x,y,z);
+            EntityBullet bullet2 = new EntityBullet(worldIn, playerIn, look.x * 2, look.y * 2, look.z * 2,x,y,z, 3);
             worldIn.spawnEntity(bullet2);
-            EntityBullet bullet3 = new EntityBullet(worldIn, playerIn, look.x * 2, look.y * 2, look.z * 2,x,y,z);
+            EntityBullet bullet3 = new EntityBullet(worldIn, playerIn, look.x * 2, look.y * 2, look.z * 2,x,y,z, 3);
             worldIn.spawnEntity(bullet3);
-            EntityBullet bullet4 = new EntityBullet(worldIn, playerIn, look.x * 2, look.y * 2, look.z * 2,x,y,z);
+            EntityBullet bullet4 = new EntityBullet(worldIn, playerIn, look.x * 2, look.y * 2, look.z * 2,x,y,z, 3);
             worldIn.spawnEntity(bullet4);
         }
         return true;
