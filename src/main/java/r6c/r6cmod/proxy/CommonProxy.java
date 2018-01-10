@@ -8,6 +8,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
+import net.minecraft.util.SoundEvent;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
@@ -27,6 +28,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Mouse;
 import r6c.r6cmod.CreativeTabR6CMod;
 import r6c.r6cmod.R6CMod;
+import r6c.r6cmod.R6CSounds;
 import r6c.r6cmod.block.R6CBlocks;
 import r6c.r6cmod.client.gui.GUIDroneTerminalDrive;
 import r6c.r6cmod.entity.EntityDrone;
@@ -50,6 +52,11 @@ public class CommonProxy {
 
     public void postInit(FMLPostInitializationEvent event) {
 
+    }
+
+    @SubscribeEvent
+    public static void registerSounds(RegistryEvent.Register<SoundEvent> event) {
+        R6CSounds.registerSounds(event);
     }
 
     @SubscribeEvent

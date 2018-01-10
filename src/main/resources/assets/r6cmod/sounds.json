@@ -1,4 +1,14 @@
 {
+  "r6c_g52tactical_reload": {
+    "sounds": [
+      "r6cmod:r6c_g52tactical_reload"
+    ]
+  },
+  "r6c_g52tactical_use": {
+    "sounds": [
+      "r6cmod:r6c_g52tactical_use"
+    ]
+  },
   "r6c_drone_driving": {
     "sounds": [
       "r6cmod:r6c_drone_driving_short"

@@ -1,17 +1,14 @@
 package r6c.r6cmod.item;
 
 import javax.annotation.Nullable;
-import javax.swing.*;
 
 import net.minecraft.block.BlockDispenser;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.item.*;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ActionResult;
@@ -21,12 +18,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import r6c.r6cmod.R6CSounds;
 
 public class ItemG52Tactical extends ItemShield
 {
 
-    private Boolean hasBlocked = false;
-    private Boolean rightClicked = false;
+    public static final int MAXUSECOOLDOWN = 30;
+    public int useCooldown;
 
     public ItemG52Tactical(String name) {
         this.maxStackSize = 1;
@@ -45,20 +43,6 @@ public class ItemG52Tactical extends ItemShield
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
-        //KeyBinding use = Minecraft.getMinecraft().gameSettings.keyBindUseItem;
-        EntityPlayer playerIn = (EntityPlayer) entityIn;
-//        if(playerIn.getHeldItemOffhand().getItem() != null && playerIn.getHeldItemOffhand().getItem() == this && playerIn.getHeldItemMainhand().getItem() != Items.BOW && !rightClicked)
-//        {
-//            hasBlocked = true;
-//            KeyBinding.setKeyBindState(use.getKeyCode(), true);
-//            playerIn.addPotionEffect((new PotionEffect(Potion.getPotionById(1), 0, 10)));
-//        }
-    }
-
-    @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
         return super.onItemRightClick(worldIn, playerIn, handIn);
     }
@@ -69,10 +53,22 @@ public class ItemG52Tactical extends ItemShield
     }
 
     @Override
+    public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+        super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
+        if(useCooldown > 0) {
+            useCooldown--;
+        }
+    }
+
+    @Override
     public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
-        EntityLivingBase attacked = (EntityLivingBase) entity;
-        attacked.addPotionEffect(new PotionEffect(Potion.getPotionById(15), 100, 100000));
-        player.addPotionEffect(new PotionEffect(Potion.getPotionById(15), 10, 100000));
+        if(useCooldown <= 0) {
+            EntityLivingBase attacked = (EntityLivingBase) entity;
+            attacked.addPotionEffect(new PotionEffect(Potion.getPotionById(15), 100, 100000));
+            player.playSound(R6CSounds.r6c_g52tactical_use, 1.0F, 1.0F);
+            useCooldown = MAXUSECOOLDOWN;
+            player.playSound(R6CSounds.r6c_g52tactical_reload, 1.0F, 1.0F);
+        }
         return true;
     }
 
